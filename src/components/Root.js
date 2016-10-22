@@ -8,7 +8,7 @@ class Root extends Component {
       <View style={styles.contianer}>
         <Container>
           <Image
-            style={{ marginTop: -40 }}
+            style={{ marginTop: -10 }}
             source={require('../Resources/GiftIt_Logo_Green.png')}
             resizeMode='contain'
           />
