@@ -1,0 +1,3 @@
+rootProject.name = 'Gift_It_Front_End'
+
+include ':app'
