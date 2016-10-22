@@ -46,7 +46,7 @@ class TabBar extends Component {
 
 const styles = StyleSheet.create({
   viewStyle: {
-    backgroundColor: '#80ffbf',
+    backgroundColor: '#8EFAB4',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
