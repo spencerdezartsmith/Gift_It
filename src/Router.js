@@ -22,6 +22,8 @@ const RouterComponent = () => {
         key='history'
         component={History}
         title='History'
+        onRight={() => console.log('Button Pressed')}
+        rightTitle='Export'
       />
     </Router>
   );
