@@ -33,4 +33,27 @@ class Graph extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    padding: 10,
+    paddingTop: 10
+  },
+  cardStyle: {
+    shadowColor: '#000000',
+    borderColor: 'white'
+  },
+  imageStyle: {
+    flex: 1,
+    width: 350,
+    height: 300,
+    resizeMode: 'contain',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+});
+
 export default Graph;
