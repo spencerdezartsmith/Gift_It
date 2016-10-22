@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { View, Text } from 'react-native';
+import { View, ART, Dimensions, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
 import { Container } from './common';
-
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { max, ticks } from 'd3-array';
+import { line } from 'd3-shape';
+import { path } from 'd3-path';
+import Svg, {
+  G,
+  Line,
+  Path,
+  Rect,
+  Text
+} from 'react-native-svg'
 
 class Graph extends Component {
   componentWillMount() {
