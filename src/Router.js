@@ -2,6 +2,7 @@ import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import Root from './components/Root';
 import Graph from './components/Graph';
+import History from './components/History';
 
 const RouterComponent = () => {
   return (
@@ -17,11 +18,11 @@ const RouterComponent = () => {
         initial
       />
       <Scene key='home' component={Graph} />
-      {/* <Scene
+      <Scene
         key='history'
         component={History}
         title='History'
-      /> */}
+      />
     </Router>
   );
 };
