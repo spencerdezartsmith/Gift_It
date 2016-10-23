@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Modal, View, Image } from 'react-native';
 import axios from 'axios';
+import { Actions } from 'react-native-router-flux';
 import RadioForm from 'react-native-simple-radio-button';
 import { CardSection } from './CardSection';
 import { Input } from './Input';
@@ -21,15 +22,21 @@ class Confirm extends Component {
   }
 
   onButtonPressed() {
-    callBackToApi();
-  }
-
-  callBackToApi() {
-
+    this.callBackToApi();
   }
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
+  }
+
+  callBackToApi() {
+    axios.post('http://localhost:3000/users/1/gifts', {
+      amount: this.state.donationAmount,
+      charity: 'Breast Cancer Research Foundation',
+      team: 'Packers'
+    })
+    .then(this.setState({ modalVisible: false, donationAmount: '' }))
+    .then(() => { Actions.home() })
   }
 
   render() {
@@ -86,7 +93,8 @@ class Confirm extends Component {
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onButtonPressed()}>
+            <Button onPress={() => this.onButtonPressed()}
+            >
               Donate
             </Button>
           </CardSection>
