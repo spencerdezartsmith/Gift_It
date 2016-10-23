@@ -126,11 +126,24 @@ class BarChart extends Component {
                 this.state.data.map((d,i) => (
                   <G key={i + 1} translate={x(d.team) + labelDx + ",0"}>
                     <Line stroke={"white"} x1={-10} x2={-10} y2={notch}/>
-                      <Text fill={d.teamColor} fontWeight="bold" fontSize="24" x={(d.team === "Packers") ? -60 : -45} y={3}>{d.team}</Text>
+                    <Text fill={d.teamColor} fontWeight="bold" fontSize="24" x={(d.team === "Packers") ? -60 : -45} y={3}>{d.team}</Text>
                   </G>
                 ))
               }
             </G>
+
+            <G key={-2}>
+              <Path stroke={"white"} strokeWidth="3" d={leftAxisD + 100} key="-1" />
+              {
+                leftAxis.map((d, i) => (
+                  <G key={i + 1} translate={"0," + (y(d) - height)}>
+                    <Line stroke={"black"} x1={notch} x2={labelDistance}/>
+                    <Text fill={"#515051"} fontWeight="bold" x={(d === 0) ? 0 : -labelDistance} y={-notch}>{d}</Text>
+                  </G>
+                ))
+              }
+            </G>
+
           </G>
         </G>
       </Svg>
