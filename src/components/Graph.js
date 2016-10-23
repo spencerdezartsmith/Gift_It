@@ -79,7 +79,44 @@ class BarChart extends Component {
           this.forceUpdate()
         });
     }
-  
+
+  render() {
+
+    const screen = Dimensions.get('window')
+    const margin = {top: 20, right: 25, bottom: 250, left: 25}
+    const width = screen.width - margin.left - margin.right
+    const height = screen.height - margin.top - margin.bottom
+    const x = scaleBand()
+      .rangeRound([0, width])
+      .padding(0.17)
+      .domain(this.state.data.map(d => d.team))
+
+    const maxFrequency = max(this.state.data, d => d.frequency)
+    const y = scaleLinear()
+      .rangeRound([height, 0])
+      .domain([0, maxFrequency])
+
+    //plugged into x to determine start point of bands
+    const firstTeamX = x(this.state.data[0].team)
+    const secondTeamX = x(this.state.data[1].team)
+    const lastTeamX = x(this.state.data[this.state.data.length - 1].team)
+    const labelDx = (secondTeamX - firstTeamX) / 2
+
+    const bottomAxis = [firstTeamX - labelDx, lastTeamX + labelDx -24]
+    const bottomAxisD = line()
+      .x(d => d + labelDx)
+      .y(() => 0)
+      (bottomAxis)
+
+    const leftAxis = ticks(0, maxFrequency, 5)
+    const leftAxisD = line()
+      .x(() => bottomAxis[0] + labelDx)
+      .y(d => y(d) - (height -1))
+      (leftAxis)
+
+    const notch = 10
+    const labelDistance = 10
+  }
 }
 
 
