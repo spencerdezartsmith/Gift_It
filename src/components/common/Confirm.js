@@ -1,89 +1,122 @@
-import React from 'react';
-import { Text, Modal, View, Image, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import { Text, Modal, View, Image } from 'react-native';
+import axios from 'axios';
+import { Actions } from 'react-native-router-flux';
+import RadioForm from 'react-native-simple-radio-button';
 import { CardSection } from './CardSection';
 import { Input } from './Input';
 import { Button } from './Button';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
-
-
-var radio_prop1 = [
-  {label: 'Packers', value: 0 }
+const radioProp1 = [
+  { label: 'Packers', value: 0 }
 ];
 
-var radio_prop2 = [
-	{label: '49ers', value: 0 }
-]
+const radioProp2 = [
+	{ label: '49ers', value: 0 }
+];
 
-const Confirm = ({ children, visible, onAccept, onDecline, label, placeholder}) => {
-	const { containerStyle, labelStyle, textStyle, cardSectionStyle, imageStyle, inputStyle, radioStyle} = styles;
+class Confirm extends Component {
+  state = {
+    donationAmount: '',
+    modalVisible: true,
+  }
 
+  onButtonPressed() {
+    this.callBackToApi();
+  }
 
-	return(
-		<Modal
-		visible={visible}
-		transparent={true}
-		animationType='fade'
-		onRequestClose={() => {}}
-		> 
-		<View style={containerStyle}>
-		<CardSection style={cardSectionStyle}>
-		<Image
-		style={ imageStyle }
-		source={require('../../Resources/GiftIt_Logo_Green.png')}
-		resizeMode='contain'
-		/>
-		</CardSection>
-		<CardSection style={cardSectionStyle}>
-		<Text style={labelStyle}>{"$"}</Text>
-		<TextInput
-		style={inputStyle}
-		placeholder={"Enter a Donation Amount"}
-		placeholderTextColor={"grey"}
-		></TextInput>
-		</CardSection>
-		
-		<CardSection>
-		<RadioForm
-          radio_props={radio_prop1}
-          style={radioStyle}
-          initial={0}
-          formHorizontal={true}
-          buttonColor={'#8EFAB4'}
-          onPress={(value) => {this.setState({value:value})}}
-        />
-        <RadioForm
-          radio_props={radio_prop2}
-          style={radioStyle}
-          initial={1}
-          formHorizontal={true}
-          buttonColor={'#8EFAB4'}
-          onPress={(value) => {this.setState({value:value})}}
-        />
-		</CardSection>
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
-		<CardSection>
-			<Button>
-				Donate
-			</Button>
-		</CardSection>
+  callBackToApi() {
+    axios.post('http://localhost:3000/users/1/gifts', {
+      amount: this.state.donationAmount,
+      charity: 'Breast Cancer Research Foundation',
+      team: 'Packers'
+    })
+    .then(this.setState({ modalVisible: false, donationAmount: '' }))
+    .then(() => { Actions.home() })
+  }
+
+  render() {
+    return (
+      <Modal
+        visible={this.state.modalVisible}
+        transparent={true}
+        animationType='fade'
+        onRequestClose={() => {}}
+      >
+        <View style={styles.containerStyle}>
+          <View style={{ backgroundColor: 'white', paddingLeft: 70 }}>
+            <Image
+              style={styles.imageStyle}
+              source={require('../../Resources/GiftIt_Logo_Green.png')}
+              resizeMode='contain'
+            />
+          </View>
+            <View style={{ backgroundColor: 'white', paddingTop: 15, paddingBottom: 5 }}>
+              <Text style={styles.headerStyle}>Welcome to Levi's Stadium!</Text>
+              <Text style={styles.textStyle}>
+                Make a donation to the Breast Cancer Research Foundation
+              </Text>
+            </View>
 
 
-		</View>
-		</Modal>
-		
-		);
-};
+          <CardSection style={styles.cardSectionStyle}>
+            <Text style={styles.labelStyle}>$</Text>
+              <Input
+                style={styles.inputStyle}
+                placeholder={'Enter a Donation Amount'}
+                value={this.state.donationAmount}
+                onChangeText={text => this.setState({ donationAmount: text })}
+              />
+          </CardSection>
+
+          <CardSection>
+            <RadioForm
+              radio_props={radioProp1}
+              style={styles.radioStyle}
+              initial={0}
+              formHorizontal={true}
+              buttonColor={'#8EFAB4'}
+              onPress={(value) => { this.setState({ value: value }); }}
+            />
+            <RadioForm
+              radio_props={radioProp2}
+              style={styles.radioStyle}
+              initial={1}
+              formHorizontal={true}
+              buttonColor={'#8EFAB4'}
+              onPress={(value) => { this.setState({ value: value }); }}
+            />
+          </CardSection>
+
+          <CardSection>
+            <Button onPress={() => this.onButtonPressed()}
+            >
+              Donate
+            </Button>
+          </CardSection>
+        </View>
+      </Modal>
+    );
+  }
+}
 
 const styles = {
+  headerStyle: {
+    fontSize: 18,
+    textAlign: 'center',
+    paddingBottom: 10
+  },
 	cardSectionStyle: {
 		justifyContent: 'center'
-	}, 
+	},
 	textStyle: {
 		flex: 1,
-		fontSize: 24,
+		fontSize: 14,
 		textAlign: 'center',
-		lineHeight: 50
 	},
 	inputStyle: {
 		textAlign: 'center',
@@ -93,12 +126,12 @@ const styles = {
 		lineHeight: 10,
 		backgroundColor: '#8EFAB4',
 		marginTop: 10,
-		marginBottom: 10
+		marginBottom: 10,
 	},
 	containerStyle: {
 		backgroundColor: 'rgba(0, 0, 0, 0.3)',
 		position: 'relative',
-		flex: 1, 
+		flex: 1,
 		justifyContent: 'center'
 	},
 	imageStyle: {
@@ -110,13 +143,13 @@ const styles = {
 	labelStyle: {
 		fontSize: 20,
 		textAlign: 'center',
-		lineHeight: 40
+		lineHeight: 40,
 	},
 	radioStyle: {
 		marginLeft: 70,
 		marginTop: 10,
 		marginBottom: 10
 	}
-}
+};
 
 export { Confirm };
