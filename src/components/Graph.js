@@ -73,7 +73,7 @@ class BarChart extends Component {
     ]}
 
     componentWillMount() {
-      axios.get('http://localhost:3000/totals')
+      axios.get('https://gift-it-rails.herokuapp.com/totals')
         .then(response => {
           this.state.data[0].amount = response.data[1],
           this.forceUpdate(),
@@ -188,7 +188,5 @@ class BarChart extends Component {
     return svg;
   }
 }
-
-
 
 export default Graph;

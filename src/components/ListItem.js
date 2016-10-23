@@ -7,8 +7,6 @@ const ListItem = (props) => {
     image: ''
   }
 
-console.log("#########")
-console.log(props.gift.icon)
   return (
     <Card>
       <CardSection>
@@ -37,12 +35,9 @@ const styles = {
   },
   thumbnailStyle: {
     height: 40,
-    width: 40
+    width: 40,
+    resizeMode: 'contain'
   }
 };
 
 export default ListItem;
-
-// add in a small thumbnail for breast cancer awareness
-// find some other charity to put in the donation
-// build out the list animation

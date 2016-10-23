@@ -25,7 +25,6 @@ class Confirm extends Component {
   }
 
   onButtonPressed() {
-    this.callBackToApi();
     this.callBackToIngenico();
   }
 
@@ -45,7 +44,7 @@ class Confirm extends Component {
           "personalInformation": {
             "name": {
               "title": "Mr.",
-              "firstName": "Wile",
+              "firstName": JSON.stringify(this.state.user.first_name),
               "surnamePrefix": "E.",
               "surname": "Coyote"
             },
@@ -132,16 +131,20 @@ class Confirm extends Component {
         }
       }
 };
-    axios.post('http://localhost:8080/payments/createPayment', json)
+    axios.post('https://gift-it-ingenico.herokuapp.com/payments/createPayment', json)
       .then(response => console.log(response))
-      .then(() => Alert.alert('Success!!', alertMessage));
+      .then(() => Alert.alert(
+        'Success!!',
+        alertMessage,
+        [{ text: 'OK', onPress: () => this.callBackToApi() }]));
   }
 
   callBackToApi() {
-    axios.post('http://localhost:3000/users/1/gifts', {
+    axios.post('https://gift-it-rails.herokuapp.com/users/1/gifts', {
       amount: this.state.donationAmount,
       charity: 'Breast Cancer Research Foundation',
-      team: 'Packers'
+      team: 'Packers',
+      icon: 'https://bighugelabs.com/img/nbcam/ribbon_3000_bg_sh.png'
     })
     .then(this.setState({ modalVisible: false, donationAmount: '' }))
     .then(response => this.setState({ user: response.data }))
@@ -149,7 +152,6 @@ class Confirm extends Component {
   }
 
   render() {
-    console.log(this.state.user);
     return (
       <Modal
         visible={this.state.modalVisible}
@@ -176,7 +178,7 @@ class Confirm extends Component {
           <CardSection style={styles.cardSectionStyle}>
             <Text style={styles.labelStyle}>$</Text>
               <Input
-                style={styles.inputStyle}
+                // style={styles.inputStyle}
                 placeholder={'Enter a Donation Amount'}
                 value={this.state.donationAmount}
                 onChangeText={text => this.setState({ donationAmount: text })}
@@ -231,7 +233,7 @@ const styles = {
 		textAlign: 'center',
 		justifyContent: 'center',
 		height: 40,
-		flex: 3,
+		flex: 1,
 		lineHeight: 10,
 		backgroundColor: '#8EFAB4',
 		marginTop: 10,
