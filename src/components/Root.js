@@ -4,7 +4,7 @@ import { Container, CardSection, Confirm } from './common';
 
 class Root extends Component {
 
-  state = { showModal: true };
+  state = { showModal: false };
 
   render() {
     return (
@@ -22,7 +22,9 @@ class Root extends Component {
        />
 
        <Confirm
+
         visible={this.state.showModal}>
+
         <View style={styles.container}>
 
         </View>
