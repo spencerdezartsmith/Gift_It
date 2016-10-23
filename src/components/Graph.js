@@ -141,7 +141,7 @@ class BarChart extends Component {
         <G translate={margin.left + "," + margin.top}>
           <G translate={"0," + height}>
             <G key={-1}>
-              <Path stroke={"white"} strokeWidth="3" d={bottomAxisD} key="-1"/>
+              <Path stroke={"white"} strokeWidth="3" d={bottomAxisD.toString()} key="-1"/>
               {
                 this.state.data.map((d,i) => (
                   <G key={i + 1} translate={x(d.team) + labelDx + ",0"}>
@@ -153,7 +153,7 @@ class BarChart extends Component {
             </G>
 
             <G key={-2}>
-              <Path stroke={"white"} strokeWidth="3" d={leftAxisD + 100} key="-1" />
+              <Path stroke={"white"} strokeWidth="3" d={(leftAxisD + 100).toString()} key="-1" />
               {
                 leftAxis.map((d, i) => (
                   <G key={i + 1} translate={"0," + (y(d) - height)}>
