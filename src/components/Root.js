@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, TouchableOpacity, Text } from 'react-native';
 import { Container, CardSection, Confirm } from './common';
+import timer from 'react-native-timer';
 
 class Root extends Component {
 
   state = { showModal: false };
+
+  componentDidMount() {
+    this.timer = setTimeout(() => {
+      this.setState({ showModal: true });
+    }, 5000);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  showConfirm() {
+    if (this.state.showModal === true) {
+      return <Confirm />;
+    }
+  }
 
   render() {
     return (
@@ -21,14 +38,8 @@ class Root extends Component {
        resizeMode='contain'
        />
 
-       <Confirm
+      {this.showConfirm()}
 
-        visible={this.state.showModal}>
-
-        <View style={styles.container}>
-
-        </View>
-      </Confirm>
      </Container>
      </View>
      );

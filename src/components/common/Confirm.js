@@ -18,6 +18,9 @@ const radioProp2 = [
 const alertMessage = 'Thank you for your donation. May the best team win!!'
 
 class Confirm extends Component {
+  constructor(props) {
+    super(props)
+  }
   state = {
     donationAmount: '',
     modalVisible: true,
@@ -156,7 +159,7 @@ class Confirm extends Component {
       <Modal
         visible={this.state.modalVisible}
         transparent={true}
-        animationType='fade'
+        animationType='slide'
         onRequestClose={() => {}}
       >
         <View style={styles.containerStyle}>
