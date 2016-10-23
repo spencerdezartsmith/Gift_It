@@ -18,11 +18,9 @@ class Graph extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <Container>
-          <Text>
-            Graph Land!!!
-          </Text>
+          <BarChart/>
         </Container>
       </View>
     );
@@ -116,6 +114,29 @@ class BarChart extends Component {
 
     const notch = 10
     const labelDistance = 10
+
+
+    const svg = (
+      <Svg width={screen.width} height={screen.height}>
+        <G translate={margin.left + "," + margin.top}>
+          <G translate={"0," + height}>
+            <G key={-1}>
+              <Path stroke={"white"} strokeWidth="3" d={bottomAxisD} key="-1"/>
+              {
+                this.state.data.map((d,i) => (
+                  <G key={i + 1} translate={x(d.team) + labelDx + ",0"}>
+                    <Line stroke={"white"} x1={-10} x2={-10} y2={notch}/>
+                      <Text fill={d.teamColor} fontWeight="bold" fontSize="24" x={(d.team === "Packers") ? -60 : -45} y={3}>{d.team}</Text>
+                  </G>
+                ))
+              }
+            </G>
+          </G>
+        </G>
+      </Svg>
+    )
+
+    return svg;
   }
 }
 
