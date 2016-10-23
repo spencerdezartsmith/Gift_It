@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Modal, View, Image } from 'react-native';
+import { Text, Modal, View, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 import RadioForm from 'react-native-simple-radio-button';
@@ -15,18 +15,126 @@ const radioProp2 = [
 	{ label: '49ers', value: 0 }
 ];
 
+const alertMessage = 'Thank you for your donation. May the best team win!!'
+
 class Confirm extends Component {
   state = {
     donationAmount: '',
     modalVisible: true,
+    user: '',
   }
 
   onButtonPressed() {
     this.callBackToApi();
+    this.callBackToIngenico();
   }
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
+  }
+
+  callBackToIngenico() {
+    const json = {
+      "order": {
+        "amountOfMoney": {
+          "currencyCode": "EUR",
+          "amount": 2980
+        },
+        "customer": {
+          "merchantCustomerId": "1234",
+          "personalInformation": {
+            "name": {
+              "title": "Mr.",
+              "firstName": "Wile",
+              "surnamePrefix": "E.",
+              "surname": "Coyote"
+            },
+            "gender": "male",
+            "dateOfBirth": "19490917"
+          },
+          "companyInformation": {
+            "name": "Acme Labs"
+          },
+          "locale": "en_GB",
+          "billingAddress": {
+            "street": "Desertroad",
+            "houseNumber": "13",
+            "additionalInfo": "b",
+            "zip": "84536",
+            "city": "Monument Valley",
+            "state": "Utah",
+            "countryCode": "US"
+          },
+          "shippingAddress": {
+            "name": {
+              "title": "Miss",
+              "firstName": "Road",
+              "surname": "Runner"
+            },
+            "street": "Desertroad",
+            "houseNumber": "1",
+            "additionalInfo": "Suite II",
+            "zip": "84536",
+            "city": "Monument Valley",
+            "state": "Utah",
+            "countryCode": "US"
+          },
+          "contactDetails": {
+            "emailAddress": "wile.e.coyote@acmelabs.com",
+            "phoneNumber": "+1234567890",
+            "faxNumber": "+1234567891",
+            "emailMessageType": "html"
+          },
+          "vatNumber": "1234AB5678CD"
+        },
+        "references": {
+          "merchantOrderId": 123456,
+          "merchantReference": "AcmeOrder0001",
+          "invoiceData": {
+            "invoiceNumber": "000000123",
+            "invoiceDate": "20140306191500"
+          },
+          "descriptor": "Fast and Furry-ous"
+        },
+        "items": [
+          {
+            "amountOfMoney": {
+              "currencyCode": "EUR",
+              "amount": 2500
+            },
+            "invoiceData": {
+              "nrOfItems": "1",
+              "pricePerItem": 2500,
+              "description": "ACME Super Outfit"
+            }
+          },
+          {
+            "amountOfMoney": {
+              "currencyCode": "EUR",
+              "amount": 480
+            },
+            "invoiceData": {
+              "nrOfItems": "12",
+              "pricePerItem": 40,
+              "description": "Aspirin"
+            }
+          }
+        ]
+      },
+      "cardPaymentMethodSpecificInput": {
+        "paymentProductId": 1,
+        "skipAuthentication": false,
+        "card": {
+          "cvv": "123",
+          "cardNumber": "4567350000427977",
+          "expiryDate": "1220",
+          "cardholderName": "Wile E. Coyote"
+        }
+      }
+};
+    axios.post('http://localhost:8080/payments/createPayment', json)
+      .then(response => console.log(response))
+      .then(() => Alert.alert('Success!!', alertMessage));
   }
 
   callBackToApi() {
@@ -36,10 +144,12 @@ class Confirm extends Component {
       team: 'Packers'
     })
     .then(this.setState({ modalVisible: false, donationAmount: '' }))
-    .then(() => { Actions.home() })
+    .then(response => this.setState({ user: response.data }))
+    .then(Actions.home());
   }
 
   render() {
+    console.log(this.state.user);
     return (
       <Modal
         visible={this.state.modalVisible}
@@ -93,8 +203,7 @@ class Confirm extends Component {
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onButtonPressed()}
-            >
+            <Button onPress={() => this.onButtonPressed()}>
               Donate
             </Button>
           </CardSection>
