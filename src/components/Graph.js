@@ -56,16 +56,16 @@ class BarChart extends Component {
     data: [
       {
         amount: 0,
+        team: '49ers',
+        teamColor: '#dba71a',
+        barColor: 'pink'
+      },
+      {
+        amount: 0,
         team: 'Packers',
         teamColor: '#0e7f31',
         barColor: '#ff60bd'
       },
-      {
-        amount: 0,
-        team: '49ers',
-        teamColor: '#dba71a',
-        barColor: 'pink'
-      }
     ]}
 
     componentWillMount() {
@@ -76,6 +76,14 @@ class BarChart extends Component {
           this.state.data[1].amount = response.data[1],
           this.forceUpdate()
         });
+    }
+
+    formatNumbers(num){
+      var formattedNum = ""
+      formattedNum += (num.toString().slice(0,2))
+      formattedNum += ","
+      formattedNum += (num.toString().slice(2))
+      return formattedNum
     }
 
   render() {
@@ -155,7 +163,7 @@ class BarChart extends Component {
                           fill={d.barColor}>
                     </Rect>
                   </TouchableWithoutFeedback>
-                  <Text fill={d.teamColor} fontWeight={"bold"} fontSize="20" x={(x(d.team)) + 34} y={y(d.amount) - (height + 25)}>{(d.amount)}</Text>
+                  <Text fill={d.teamColor} fontWeight={"bold"} fontSize="20" x={(x(d.team)) + 34} y={y(d.amount) - (height + 25)}>{this.formatNumbers(d.amount)}</Text>
 
                 </G>
               ))
