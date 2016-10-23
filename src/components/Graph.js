@@ -71,9 +71,9 @@ class BarChart extends Component {
     componentWillMount() {
       axios.get('http://localhost:3000/totals')
         .then(response => {
-          this.state.data[0].frequency = response.data[0],
+          this.state.data[0].amount = response.data[0],
           this.forceUpdate(),
-          this.state.data[1].frequency = response.data[1],
+          this.state.data[1].amount = response.data[1],
           this.forceUpdate()
         });
     }
@@ -89,7 +89,7 @@ class BarChart extends Component {
       .padding(0.17)
       .domain(this.state.data.map(d => d.team))
 
-    const maxFrequency = max(this.state.data, d => d.frequency)
+    const maxFrequency = max(this.state.data, d => d.amount)
     const y = scaleLinear()
       .rangeRound([height, 0])
       .domain([0, maxFrequency])
@@ -143,7 +143,23 @@ class BarChart extends Component {
                 ))
               }
             </G>
+            {console.log(this.state.data)}
+            {
+              this.state.data.map((d, i) => (
+                <G>
+                <TouchableWithoutFeedback key={i}>
+                    <Rect x={(x(d.team)) + 1}
+                          y={y(d.amount) - (height + 1)}
+                          width={x.bandwidth()}
+                          height={height - y(d.amount)}
+                          fill={d.barColor}>
+                    </Rect>
+                  </TouchableWithoutFeedback>
+                  <Text fill={d.teamColor} fontWeight={"bold"} fontSize="20" x={(x(d.team)) + 34} y={y(d.amount) - (height + 25)}>{(d.amount)}</Text>
 
+                </G>
+              ))
+            }
           </G>
         </G>
       </Svg>
