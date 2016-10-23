@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
-import { Container } from './common';
+import { Container, CardSection, Confirm } from './common';
 
 class Root extends Component {
+
+  state = { showModal: true };
+
   render() {
     return (
-      <View style={styles.contianer}>
-        <Container>
-          <Image
-            style={{ marginTop: -10 }}
-            source={require('../Resources/GiftIt_Logo_Green.png')}
-            resizeMode='contain'
-          />
-          <Image
-            style={styles.imageStyle}
-            source={require('../Resources/gift-it-blue.gif')}
-            resizeMode='contain'
-          />
-        </Container>
-      </View>
-    );
+     <View style={styles.container}>
+      <Container>
+       <Image
+       style={{ marginTop: -10 }}
+       source={require('../Resources/GiftIt_Logo_Green.png')}
+       resizeMode='contain'
+       />
+       <Image
+       style={styles.imageStyle}
+       source={require('../Resources/gift-it-blue.gif')}
+       resizeMode='contain'
+       />
+
+       <Confirm 
+       visible={ this.state.showModal }>
+        <View style={styles.container}>
+          
+        </View>
+      </Confirm>
+     </Container>
+     </View>
+     );
   }
 }
 
