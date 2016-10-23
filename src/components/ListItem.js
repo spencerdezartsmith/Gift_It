@@ -7,13 +7,16 @@ const ListItem = (props) => {
     image: ''
   }
 
+console.log("#########")
+console.log(props.gift.icon)
   return (
     <Card>
       <CardSection>
         <View>
           <Image
             style={styles.thumbnailStyle}
-            source={require('../Resources/ribbon-color-pink-breast-cancer-awareness.png')}
+            source={{uri: props.gift.icon}}
+
           />
         </View>
 
