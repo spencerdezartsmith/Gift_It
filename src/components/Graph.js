@@ -56,4 +56,28 @@ const styles = StyleSheet.create({
   },
 });
 
+class BarChart extends Component {
+
+  state = {
+    data: [
+      {
+        amount: 0,
+        team: 'Packers',
+        teamColor: '#0e7f31',
+        barColor: '#ff60bd'
+      },
+      {
+        amount: 0,
+        team: '49ers',
+        teamColor: '#dba71a',
+        barColor: 'pink'
+      }
+    ]}
+
+
+  
+}
+
+
+
 export default Graph;
