@@ -58,13 +58,17 @@ class BarChart extends Component {
         amount: 0,
         team: 'Packers',
         teamColor: '#0e7f31',
-        barColor: '#ff60bd'
+        barColor: '#ff60bd',
+        staticBarColor: '#ff60bd',
+        labelColor: 'white'
       },
       {
         amount: 0,
         team: '49ers',
         teamColor: '#dba71a',
-        barColor: 'pink'
+        barColor: 'pink',
+        staticBarColor: 'pink',
+        labelColor: 'white'
       }
     ]}
 
@@ -84,6 +88,14 @@ class BarChart extends Component {
       formattedNum += ","
       formattedNum += (num.toString().slice(2))
       return formattedNum
+    }
+
+
+    toggleHighlight(d, i) {
+        this.state.data[i].barColor = (this.state.data[i].barColor === this.state.data[i].staticBarColor ? this.state.data[i].teamColor : this.state.data[i].staticBarColor)
+        this.forceUpdate()
+        this.state.data[i].labelColor = (this.state.data[i].labelColor === "white" ? this.state.data[i].teamColor : "white")
+        this.forceUpdate()
     }
 
   render() {
@@ -155,7 +167,7 @@ class BarChart extends Component {
             {
               this.state.data.map((d, i) => (
                 <G key={i + 1}>
-                <TouchableWithoutFeedback key={i}>
+                <TouchableWithoutFeedback key={i} onPress={()=>this.toggleHighlight(d, i)}>
                     <Rect x={(x(d.team)) + 1}
                           y={y(d.amount) - (height + 1)}
                           width={x.bandwidth()}
@@ -163,7 +175,7 @@ class BarChart extends Component {
                           fill={d.barColor}>
                     </Rect>
                   </TouchableWithoutFeedback>
-                  <Text fill={d.teamColor} fontWeight={"bold"} fontSize="20" x={(x(d.team)) + 34} y={y(d.amount) - (height + 25)}>{this.formatNumbers(d.amount)}</Text>
+                  <Text fill={d.labelColor} fontWeight={"bold"} fontSize="20" x={(x(d.team)) + 34} y={y(d.amount) - (height + 25)}>{this.formatNumbers(d.amount)}</Text>
 
                 </G>
               ))
