@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Modal, View, Image } from 'react-native';
+import { Text, Modal, View, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 import RadioForm from 'react-native-simple-radio-button';
@@ -15,28 +15,143 @@ const radioProp2 = [
 	{ label: '49ers', value: 0 }
 ];
 
+const alertMessage = 'Thank you for your donation. May the best team win!!'
+
 class Confirm extends Component {
+  constructor(props) {
+    super(props)
+  }
   state = {
     donationAmount: '',
     modalVisible: true,
+    user: '',
   }
 
   onButtonPressed() {
-    this.callBackToApi();
+    this.callBackToIngenico();
   }
 
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
 
+  callBackToIngenico() {
+    const json = {
+      "order": {
+        "amountOfMoney": {
+          "currencyCode": "EUR",
+          "amount": 2980
+        },
+        "customer": {
+          "merchantCustomerId": "1234",
+          "personalInformation": {
+            "name": {
+              "title": "Mr.",
+              "firstName": JSON.stringify(this.state.user.first_name),
+              "surnamePrefix": "E.",
+              "surname": "Coyote"
+            },
+            "gender": "male",
+            "dateOfBirth": "19490917"
+          },
+          "companyInformation": {
+            "name": "Acme Labs"
+          },
+          "locale": "en_GB",
+          "billingAddress": {
+            "street": "Desertroad",
+            "houseNumber": "13",
+            "additionalInfo": "b",
+            "zip": "84536",
+            "city": "Monument Valley",
+            "state": "Utah",
+            "countryCode": "US"
+          },
+          "shippingAddress": {
+            "name": {
+              "title": "Miss",
+              "firstName": "Road",
+              "surname": "Runner"
+            },
+            "street": "Desertroad",
+            "houseNumber": "1",
+            "additionalInfo": "Suite II",
+            "zip": "84536",
+            "city": "Monument Valley",
+            "state": "Utah",
+            "countryCode": "US"
+          },
+          "contactDetails": {
+            "emailAddress": "wile.e.coyote@acmelabs.com",
+            "phoneNumber": "+1234567890",
+            "faxNumber": "+1234567891",
+            "emailMessageType": "html"
+          },
+          "vatNumber": "1234AB5678CD"
+        },
+        "references": {
+          "merchantOrderId": 123456,
+          "merchantReference": "AcmeOrder0001",
+          "invoiceData": {
+            "invoiceNumber": "000000123",
+            "invoiceDate": "20140306191500"
+          },
+          "descriptor": "Fast and Furry-ous"
+        },
+        "items": [
+          {
+            "amountOfMoney": {
+              "currencyCode": "EUR",
+              "amount": 2500
+            },
+            "invoiceData": {
+              "nrOfItems": "1",
+              "pricePerItem": 2500,
+              "description": "ACME Super Outfit"
+            }
+          },
+          {
+            "amountOfMoney": {
+              "currencyCode": "EUR",
+              "amount": 480
+            },
+            "invoiceData": {
+              "nrOfItems": "12",
+              "pricePerItem": 40,
+              "description": "Aspirin"
+            }
+          }
+        ]
+      },
+      "cardPaymentMethodSpecificInput": {
+        "paymentProductId": 1,
+        "skipAuthentication": false,
+        "card": {
+          "cvv": "123",
+          "cardNumber": "4567350000427977",
+          "expiryDate": "1220",
+          "cardholderName": "Wile E. Coyote"
+        }
+      }
+};
+    axios.post('https://gift-it-ingenico.herokuapp.com/payments/createPayment', json)
+      .then(response => console.log(response))
+      .then(() => Alert.alert(
+        'Success!!',
+        alertMessage,
+        [{ text: 'OK', onPress: () => this.callBackToApi() }]));
+  }
+
   callBackToApi() {
-    axios.post('http://localhost:3000/users/1/gifts', {
+    axios.post('https://gift-it-rails.herokuapp.com/users/1/gifts', {
       amount: this.state.donationAmount,
       charity: 'Breast Cancer Research Foundation',
-      team: 'Packers'
+      team: 'Packers',
+      icon: 'https://bighugelabs.com/img/nbcam/ribbon_3000_bg_sh.png'
     })
     .then(this.setState({ modalVisible: false, donationAmount: '' }))
-    .then(() => { Actions.home() })
+    .then(response => this.setState({ user: response.data }))
+    .then(Actions.home());
   }
 
   render() {
@@ -44,7 +159,7 @@ class Confirm extends Component {
       <Modal
         visible={this.state.modalVisible}
         transparent={true}
-        animationType='fade'
+        animationType='slide'
         onRequestClose={() => {}}
       >
         <View style={styles.containerStyle}>
@@ -66,7 +181,7 @@ class Confirm extends Component {
           <CardSection style={styles.cardSectionStyle}>
             <Text style={styles.labelStyle}>$</Text>
               <Input
-                style={styles.inputStyle}
+                // style={styles.inputStyle}
                 placeholder={'Enter a Donation Amount'}
                 value={this.state.donationAmount}
                 onChangeText={text => this.setState({ donationAmount: text })}
@@ -93,8 +208,7 @@ class Confirm extends Component {
           </CardSection>
 
           <CardSection>
-            <Button onPress={() => this.onButtonPressed()}
-            >
+            <Button onPress={() => this.onButtonPressed()}>
               Donate
             </Button>
           </CardSection>
@@ -122,7 +236,7 @@ const styles = {
 		textAlign: 'center',
 		justifyContent: 'center',
 		height: 40,
-		flex: 3,
+		flex: 1,
 		lineHeight: 10,
 		backgroundColor: '#8EFAB4',
 		marginTop: 10,

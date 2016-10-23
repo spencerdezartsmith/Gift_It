@@ -7,8 +7,9 @@ class History extends Component {
   state = { gifts: [] };
 
   componentWillMount() {
-    axios.get('http://localhost:3000/users/1/gifts')
-    .then(response => this.setState({ gifts: response.data }));
+    axios.get('https://gift-it-rails.herokuapp.com/users/1/gifts')
+      .then(response => { this.setState({ gifts: response.data }) })
+      .catch(error => console.log(error));
   }
 
   renderGifts() {
@@ -18,6 +19,7 @@ class History extends Component {
   }
 
   render() {
+    console.log(this.state.gifts)
     return (
       <View>
         {this.renderGifts()}
