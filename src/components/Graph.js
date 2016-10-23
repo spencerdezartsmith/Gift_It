@@ -56,24 +56,24 @@ class BarChart extends Component {
     data: [
       {
         amount: 0,
-        team: '49ers',
-        teamColor: '#dba71a',
-        barColor: 'pink'
-      },
-      {
-        amount: 0,
         team: 'Packers',
         teamColor: '#0e7f31',
         barColor: '#ff60bd'
       },
+      {
+        amount: 0,
+        team: '49ers',
+        teamColor: '#dba71a',
+        barColor: 'pink'
+      }
     ]}
 
     componentWillMount() {
       axios.get('http://localhost:3000/totals')
         .then(response => {
-          this.state.data[0].amount = response.data[0],
+          this.state.data[0].amount = response.data[1],
           this.forceUpdate(),
-          this.state.data[1].amount = response.data[1],
+          this.state.data[1].amount = response.data[0],
           this.forceUpdate()
         });
     }
@@ -154,7 +154,7 @@ class BarChart extends Component {
             {console.log(this.state.data)}
             {
               this.state.data.map((d, i) => (
-                <G>
+                <G key={i + 1}>
                 <TouchableWithoutFeedback key={i}>
                     <Rect x={(x(d.team)) + 1}
                           y={y(d.amount) - (height + 1)}
