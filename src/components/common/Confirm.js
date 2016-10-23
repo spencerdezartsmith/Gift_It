@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Text, Modal, View, Image } from 'react-native';
+import axios from 'axios';
 import RadioForm from 'react-native-simple-radio-button';
 import { CardSection } from './CardSection';
 import { Input } from './Input';
@@ -19,12 +20,19 @@ class Confirm extends Component {
     modalVisible: true,
   }
 
+  onButtonPressed() {
+    callBackToApi();
+  }
+
+  callBackToApi() {
+
+  }
+
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
 
   render() {
-    console.log(this.state.donationAmount);
     return (
       <Modal
         visible={this.state.modalVisible}
@@ -33,13 +41,20 @@ class Confirm extends Component {
         onRequestClose={() => {}}
       >
         <View style={styles.containerStyle}>
-          <CardSection style={styles.cardSectionStyle}>
+          <View style={{ backgroundColor: 'white', paddingLeft: 70 }}>
             <Image
               style={styles.imageStyle}
               source={require('../../Resources/GiftIt_Logo_Green.png')}
               resizeMode='contain'
             />
-          </CardSection>
+          </View>
+            <View style={{ backgroundColor: 'white', paddingTop: 15, paddingBottom: 5 }}>
+              <Text style={styles.headerStyle}>Welcome to Levi's Stadium!</Text>
+              <Text style={styles.textStyle}>
+                Make a donation to the Breast Cancer Research Foundation
+              </Text>
+            </View>
+
 
           <CardSection style={styles.cardSectionStyle}>
             <Text style={styles.labelStyle}>$</Text>
@@ -71,26 +86,29 @@ class Confirm extends Component {
           </CardSection>
 
           <CardSection>
-            <Button>
+            <Button onPress={() => this.onButtonPressed()}>
               Donate
             </Button>
           </CardSection>
         </View>
       </Modal>
-
-);
+    );
+  }
 }
-};
 
 const styles = {
+  headerStyle: {
+    fontSize: 18,
+    textAlign: 'center',
+    paddingBottom: 10
+  },
 	cardSectionStyle: {
-		justifyContent: 'center',
+		justifyContent: 'center'
 	},
 	textStyle: {
 		flex: 1,
-		fontSize: 24,
+		fontSize: 14,
 		textAlign: 'center',
-		lineHeight: 50
 	},
 	inputStyle: {
 		textAlign: 'center',
@@ -100,7 +118,7 @@ const styles = {
 		lineHeight: 10,
 		backgroundColor: '#8EFAB4',
 		marginTop: 10,
-		marginBottom: 10
+		marginBottom: 10,
 	},
 	containerStyle: {
 		backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -117,7 +135,7 @@ const styles = {
 	labelStyle: {
 		fontSize: 20,
 		textAlign: 'center',
-		lineHeight: 40
+		lineHeight: 40,
 	},
 	radioStyle: {
 		marginLeft: 70,
