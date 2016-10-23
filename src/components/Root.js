@@ -11,7 +11,7 @@ class Root extends Component {
      <View style={styles.container}>
       <Container>
        <Image
-       style={{ marginTop: -10 }}
+       style={{ marginTop: -40 }}
        source={require('../Resources/GiftIt_Logo_Green.png')}
        resizeMode='contain'
        />
@@ -21,10 +21,10 @@ class Root extends Component {
        resizeMode='contain'
        />
 
-       <Confirm 
-       visible={ this.state.showModal }>
+       <Confirm
+        visible={this.state.showModal}>
         <View style={styles.container}>
-          
+
         </View>
       </Confirm>
      </Container>
