@@ -1,84 +1,91 @@
-import React from 'react';
-import { Text, Modal, View, Image, TextInput } from 'react-native';
+import React, { Component } from 'react';
+import { Text, Modal, View, Image } from 'react-native';
+import RadioForm from 'react-native-simple-radio-button';
 import { CardSection } from './CardSection';
 import { Input } from './Input';
 import { Button } from './Button';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
-
-
-var radio_prop1 = [
-  {label: 'Packers', value: 0 }
+const radioProp1 = [
+  { label: 'Packers', value: 0 }
 ];
 
-var radio_prop2 = [
-	{label: '49ers', value: 0 }
-]
+const radioProp2 = [
+	{ label: '49ers', value: 0 }
+];
 
-const Confirm = ({ children, visible, onAccept, onDecline, label, placeholder}) => {
-	const { containerStyle, labelStyle, textStyle, cardSectionStyle, imageStyle, inputStyle, radioStyle} = styles;
+class Confirm extends Component {
+  state = {
+    donationAmount: '',
+    modalVisible: true,
+  }
 
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
-	return(
-		<Modal
-		visible={visible}
-		transparent={true}
-		animationType='fade'
-		onRequestClose={() => {}}
-		> 
-		<View style={containerStyle}>
-		<CardSection style={cardSectionStyle}>
-		<Image
-		style={ imageStyle }
-		source={require('../../Resources/GiftIt_Logo_Green.png')}
-		resizeMode='contain'
-		/>
-		</CardSection>
-		<CardSection style={cardSectionStyle}>
-		<Text style={labelStyle}>{"$"}</Text>
-		<TextInput
-		style={inputStyle}
-		placeholder={"Enter a Donation Amount"}
-		placeholderTextColor={"grey"}
-		></TextInput>
-		</CardSection>
-		
-		<CardSection>
-		<RadioForm
-          radio_props={radio_prop1}
-          style={radioStyle}
-          initial={0}
-          formHorizontal={true}
-          buttonColor={'#8EFAB4'}
-          onPress={(value) => {this.setState({value:value})}}
-        />
-        <RadioForm
-          radio_props={radio_prop2}
-          style={radioStyle}
-          initial={1}
-          formHorizontal={true}
-          buttonColor={'#8EFAB4'}
-          onPress={(value) => {this.setState({value:value})}}
-        />
-		</CardSection>
+  render() {
+    console.log(this.state.donationAmount);
+    return (
+      <Modal
+        visible={this.state.modalVisible}
+        transparent={true}
+        animationType='fade'
+        onRequestClose={() => {}}
+      >
+        <View style={styles.containerStyle}>
+          <CardSection style={styles.cardSectionStyle}>
+            <Image
+              style={styles.imageStyle}
+              source={require('../../Resources/GiftIt_Logo_Green.png')}
+              resizeMode='contain'
+            />
+          </CardSection>
 
-		<CardSection>
-			<Button>
-				Donate
-			</Button>
-		</CardSection>
+          <CardSection style={styles.cardSectionStyle}>
+            <Text style={styles.labelStyle}>$</Text>
+              <Input
+                style={styles.inputStyle}
+                placeholder={'Enter a Donation Amount'}
+                value={this.state.donationAmount}
+                onChangeText={text => this.setState({ donationAmount: text })}
+              />
+          </CardSection>
 
+          <CardSection>
+            <RadioForm
+              radio_props={radioProp1}
+              style={styles.radioStyle}
+              initial={0}
+              formHorizontal={true}
+              buttonColor={'#8EFAB4'}
+              onPress={(value) => { this.setState({ value: value }); }}
+            />
+            <RadioForm
+              radio_props={radioProp2}
+              style={styles.radioStyle}
+              initial={1}
+              formHorizontal={true}
+              buttonColor={'#8EFAB4'}
+              onPress={(value) => { this.setState({ value: value }); }}
+            />
+          </CardSection>
 
-		</View>
-		</Modal>
-		
-		);
+          <CardSection>
+            <Button>
+              Donate
+            </Button>
+          </CardSection>
+        </View>
+      </Modal>
+
+);
+}
 };
 
 const styles = {
 	cardSectionStyle: {
-		justifyContent: 'center'
-	}, 
+		justifyContent: 'center',
+	},
 	textStyle: {
 		flex: 1,
 		fontSize: 24,
@@ -98,7 +105,7 @@ const styles = {
 	containerStyle: {
 		backgroundColor: 'rgba(0, 0, 0, 0.3)',
 		position: 'relative',
-		flex: 1, 
+		flex: 1,
 		justifyContent: 'center'
 	},
 	imageStyle: {
@@ -117,6 +124,6 @@ const styles = {
 		marginTop: 10,
 		marginBottom: 10
 	}
-}
+};
 
 export { Confirm };
