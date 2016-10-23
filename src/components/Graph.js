@@ -15,10 +15,6 @@ import Svg, {
 } from 'react-native-svg'
 
 class Graph extends Component {
-  componentWillMount() {
-    axios.get('http://localhost:3000/totals')
-      .then(response => console.log(response.data)); // this is the array
-  }
 
   render() {
     return (
@@ -74,7 +70,15 @@ class BarChart extends Component {
       }
     ]}
 
-
+    componentWillMount() {
+      axios.get('http://localhost:3000/totals')
+        .then(response => {
+          this.state.data[0].frequency = response.data[0],
+          this.forceUpdate(),
+          this.state.data[1].frequency = response.data[1],
+          this.forceUpdate()
+        });
+    }
   
 }
 
